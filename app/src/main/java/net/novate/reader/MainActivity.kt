@@ -1,8 +1,9 @@
 package net.novate.reader
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_dashboard -> {
                 message.setText(R.string.title_dashboard)
+                startActivity(Intent(this, NovelActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {

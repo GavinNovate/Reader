@@ -2,10 +2,13 @@ package net.novate.reader
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okio.BufferedSink
+import okio.buffer
+import okio.sink
 import org.jsoup.Jsoup
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
+import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
@@ -88,18 +91,19 @@ class ExampleUnitTest {
             .select("a").forEach {
                 chapters.add(Pair(it.attr("href").trim(), it.text().trim()))
             }
-        chapters.forEach {
-            //            println(it.first + "  " + it.second)
-            content("https://m.qiushuzw.com/" + it.first)
+        File("/home/gavin/Test/novel.txt").sink().buffer().use { sink ->
+            chapters.forEach {
+                content("https://m.qiushuzw.com/" + it.first, sink)
+            }
         }
     }
 
     @Test
     fun contentTest() {
-        content("https://m.qiushuzw.com/51748/14002109.html")
+        content("https://m.qiushuzw.com/51748/14002109.html", null)
     }
 
-    private fun content(url: String) {
+    private fun content(url: String, sink: BufferedSink?) {
         val document = Jsoup.connect(url).get()
         val content = StringBuilder()
 
@@ -110,10 +114,11 @@ class ExampleUnitTest {
                 html = html
                     .replace(Regex("<.*>"), "")
                     .replace(Regex("[ \n]"), "")
-                    .replace(Regex("&nbsp;&nbsp;&nbsp;&nbsp;"), "\n    ")
+                    .replace(Regex("&nbsp;&nbsp;&nbsp;&nbsp;"), "\n　　")
                     .trim()
                 content.append("    ").append(html).append("\n\n")
             }
         print(content.toString())
+        sink?.writeUtf8(content.toString())
     }
 }
