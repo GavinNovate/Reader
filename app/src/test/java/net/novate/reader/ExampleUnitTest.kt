@@ -95,6 +95,7 @@ class ExampleUnitTest {
             chapters.forEach {
                 content("https://m.qiushuzw.com/" + it.first, sink)
             }
+            " a"
         }
     }
 

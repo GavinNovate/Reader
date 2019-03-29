@@ -14,6 +14,7 @@ private const val TAG = "NovelActivity"
 class NovelActivity : AppCompatActivity() {
 
     private lateinit var binding: NovelActivityBinding
+    lateinit var viewModel: PermissionsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,14 +22,14 @@ class NovelActivity : AppCompatActivity() {
 
 //        binding.content.text = assets.open("novel.txt").source().buffer().readUtf8()
 
-        val viewModel = ViewModelProviders.of(this)[PermissionsViewModel::class.java]
+        viewModel = ViewModelProviders.of(this)[PermissionsViewModel::class.java]
 
 
-        println("code" + viewModel.code())
-
-        viewModel.test()
-
-        println("code" + viewModel.code())
+//        println("code" + viewModel.code())
+//
+//        viewModel.test()
+//
+//        println("code" + viewModel.code())
 
 
         val liveData = MutableLiveData<String>()
@@ -45,6 +46,12 @@ class NovelActivity : AppCompatActivity() {
         liveData.observe(this) {
 
         }
+
+        val bean = Bean()
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        viewModel.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 }
