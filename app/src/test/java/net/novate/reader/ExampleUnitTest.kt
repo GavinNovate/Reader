@@ -67,14 +67,7 @@ class ExampleUnitTest {
 
         // 章节分页数据
         val pages = ArrayList<String>()
-        document
-            .select("div.cover")
-            .select("div.listpage")
-            .select("select")
-            .select("option")
-            .forEach {
-                pages.add(it.attr("value"))
-            }
+        document.select("div.cover").select("div.listpage").select("select").select("option").forEach { pages.add(it.attr("value")) }
     }
 
     @Test

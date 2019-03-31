@@ -48,10 +48,17 @@ class NovelActivity : AppCompatActivity() {
         }
 
         val bean = Bean()
+
+        viewModel.requestManifestPermissions(this) { ints: IntArray? ->
+            ints?.forEach { i -> println(i) }
+            println(viewModel.requests)
+        }
+
+        println(viewModel.requests)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        viewModel.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        viewModel.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
     }
 }

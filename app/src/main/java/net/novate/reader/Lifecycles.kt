@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 
 fun <T> LiveData<T>.observe(owner: LifecycleOwner, observer: (T?) -> Unit) {
-    observe(owner, Observer<T> { t -> observer(t) })
+    observe(owner, Observer<T> { observer(it) })
 }
 
 fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: (T?) -> Unit) {
