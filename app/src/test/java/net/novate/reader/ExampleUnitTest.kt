@@ -3,6 +3,7 @@ package net.novate.reader
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.BufferedSink
+import okio.appendingSink
 import okio.buffer
 import okio.sink
 import org.jsoup.Jsoup
@@ -65,17 +66,38 @@ class ExampleUnitTest {
         println(map)
 
 
+        val file = File("D:\\Test\\novel_last_1.txt")
+        file.parentFile.mkdirs()
+        file.createNewFile()
+
         // 章节分页数据
         val pages = ArrayList<String>()
         document.select("div.cover").select("div.listpage").select("select").select("option").forEach { pages.add(it.attr("value")) }
+//        println(pages)
+        file.appendingSink().buffer().use {
+            //            pages.forEach { s ->
+//                chapter("https://m.qiushuzw.com$s", it)
+//            }
+
+            // 最后3组
+//            pages.takeLast(3).forEach { s ->
+//                chapter("https://m.qiushuzw.com$s", it)
+//            }
+
+            pages.takeLast(1).forEach { s ->
+                chapter("https://m.qiushuzw.com$s", it)
+            }
+        }
     }
 
     @Test
     fun chapterTest() {
-        chapter("https://m.qiushuzw.com/51748/page-1.html")
+//        chapter("https://m.qiushuzw.com/51748/page-1.html")
     }
 
-    private fun chapter(url: String) {
+    private fun chapter(url: String, sink: BufferedSink?) {
+        println("-----------------------")
+        println(url)
         val document = Jsoup.connect(url).get()
         val chapters = ArrayList<Pair<String, String>>()
         document
@@ -84,11 +106,15 @@ class ExampleUnitTest {
             .select("a").forEach {
                 chapters.add(Pair(it.attr("href").trim(), it.text().trim()))
             }
-        File("/home/gavin/Test/novel.txt").sink().buffer().use { sink ->
-            chapters.forEach {
-                content("https://m.qiushuzw.com/" + it.first, sink)
-            }
-            " a"
+//        sink?.use { s ->
+//        chapters.forEach {
+//            content("https://m.qiushuzw.com${it.first}", sink)
+//        }
+//        }
+
+        // 最后2章
+        chapters.takeLast(4).forEach {
+            content("https://m.qiushuzw.com${it.first}", sink)
         }
     }
 
@@ -98,6 +124,8 @@ class ExampleUnitTest {
     }
 
     private fun content(url: String, sink: BufferedSink?) {
+        println(url)
+
         val document = Jsoup.connect(url).get()
         val content = StringBuilder()
 
@@ -112,7 +140,7 @@ class ExampleUnitTest {
                     .trim()
                 content.append("    ").append(html).append("\n\n")
             }
-        print(content.toString())
+//        print(content.toString())
         sink?.writeUtf8(content.toString())
     }
 }
