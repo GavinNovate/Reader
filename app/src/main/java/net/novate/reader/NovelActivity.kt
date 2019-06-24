@@ -14,7 +14,7 @@ private const val TAG = "NovelActivity"
 class NovelActivity : AppCompatActivity() {
 
     private lateinit var binding: NovelActivityBinding
-    lateinit var viewModel: PermissionsViewModel
+    private lateinit var viewModel: PermissionsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
